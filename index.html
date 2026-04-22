@@ -1,34 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reloj Cucú</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reloj Cucú PRO</title>
 
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
 <div class="container">
+
     <div class="clock">
         <div class="roof"></div>
+
+        <!-- Puerta -->
         <div class="door"></div>
         <div class="cucu" id="cucu">🐦</div>
 
-        <div class="face">
-            <div class="time" id="time"></div>
-            <div class="date" id="date"></div>
+        <!-- Reloj analógico -->
+        <div class="analog">
+            <div class="hand hour" id="hour"></div>
+            <div class="hand minute" id="minute"></div>
+            <div class="hand second" id="second"></div>
+        </div>
+
+        <!-- Reloj digital -->
+        <div class="digital">
+            <div id="time"></div>
+            <div id="date"></div>
         </div>
     </div>
 
-    <div class="location" id="location">
-        Obteniendo ubicación...
+    <div class="info">
+        <p id="location">📍 Obteniendo ubicación...</p>
+        <button onclick="obtenerUbicacion()">Actualizar ubicación</button>
     </div>
+
 </div>
 
-<!-- Enlace al JS -->
-<script src="./script.js"></script>
+<audio id="sound" src="https://www.soundjay.com/clock/cuckoo-clock-1.mp3"></audio>
+
+<script src="script.js"></script>
 
 </body>
 </html>
