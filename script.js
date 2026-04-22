@@ -1,90 +1,81 @@
-// Reloj completo
-function actualizarReloj() {
+// RELOJ
+function reloj() {
     const now = new Date();
 
-    // DIGITAL
     document.getElementById("time").textContent =
         now.toLocaleTimeString();
 
     document.getElementById("date").textContent =
-        now.toLocaleDateString('es-ES', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
+        now.toLocaleDateString();
 
-    // ANALÓGICO
-    const segundos = now.getSeconds();
-    const minutos = now.getMinutes();
-    const horas = now.getHours();
-
-    const secondDeg = segundos * 6;
-    const minuteDeg = minutos * 6;
-    const hourDeg = horas * 30 + minutos * 0.5;
+    const s = now.getSeconds() * 6;
+    const m = now.getMinutes() * 6;
+    const h = now.getHours() * 30;
 
     document.getElementById("second").style.transform =
-        `translateX(-50%) rotate(${secondDeg}deg)`;
+        `translateX(-50%) rotate(${s}deg)`;
 
     document.getElementById("minute").style.transform =
-        `translateX(-50%) rotate(${minuteDeg}deg)`;
+        `translateX(-50%) rotate(${m}deg)`;
 
     document.getElementById("hour").style.transform =
-        `translateX(-50%) rotate(${hourDeg}deg)`;
+        `translateX(-50%) rotate(${h}deg)`;
 
-    // CUCÚ cada hora
-    if (minutos === 0 && segundos === 0) {
-        activarCucu();
-    }
+    if (now.getMinutes() === 0 && now.getSeconds() === 0) cucu();
 }
 
-setInterval(actualizarReloj, 1000);
-actualizarReloj();
+setInterval(reloj, 1000);
 
-// CUCÚ PRO
-function activarCucu() {
-    const cucu = document.getElementById("cucu");
+// CUCÚ
+function cucu() {
+    const bird = document.getElementById("cucu");
     const sound = document.getElementById("sound");
 
-    cucu.style.display = "block";
-    cucu.style.animation = "cucuAnim 2s";
-
+    bird.style.display = "block";
     sound.play();
 
-    setTimeout(() => {
-        cucu.style.display = "none";
-    }, 2000);
+    setTimeout(() => bird.style.display = "none", 2000);
 }
 
-// UBICACIÓN + CIUDAD REAL
-function obtenerUbicacion() {
-    const loc = document.getElementById("location");
+// UBICACIÓN + CLIMA
+async function obtenerDatos() {
+    navigator.geolocation.getCurrentPosition(async pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async pos => {
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
+        // Ciudad
+        const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+        );
+        const data = await res.json();
 
-            try {
-                const res = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
-                );
-                const data = await res.json();
+        document.getElementById("location").textContent =
+            "📍 " + (data.address.city || "Tu ubicación");
 
-                const ciudad =
-                    data.address.city ||
-                    data.address.town ||
-                    data.address.village ||
-                    "Ubicación desconocida";
+        // Clima (Open-Meteo)
+        const clima = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+        );
+        const climaData = await clima.json();
 
-                loc.textContent = `📍 ${ciudad}`;
-            } catch {
-                loc.textContent = `📍 Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`;
-            }
-        });
-    } else {
-        loc.textContent = "No soporta geolocalización";
-    }
+        document.getElementById("weather").textContent =
+            `🌦️ ${climaData.current_weather.temperature}°C`;
+    });
 }
 
-obtenerUbicacion();
+obtenerDatos();
+
+// MODO OSCURO
+function toggleModo() {
+    document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "modo",
+        document.body.classList.contains("dark") ? "dark" : "light"
+    );
+}
+
+// Cargar modo guardado
+if (localStorage.getItem("modo") === "dark") {
+    document.body.classList.add("dark");
+}
