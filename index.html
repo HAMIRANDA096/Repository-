@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reloj Cucú PRO</title>
+<title>Reloj Cucú</title>
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
@@ -15,18 +15,15 @@
     <div class="clock">
         <div class="roof"></div>
 
-        <!-- Puerta -->
         <div class="door"></div>
         <div class="cucu" id="cucu">🐦</div>
 
-        <!-- Reloj analógico -->
         <div class="analog">
             <div class="hand hour" id="hour"></div>
             <div class="hand minute" id="minute"></div>
             <div class="hand second" id="second"></div>
         </div>
 
-        <!-- Reloj digital -->
         <div class="digital">
             <div id="time"></div>
             <div id="date"></div>
@@ -34,15 +31,20 @@
     </div>
 
     <div class="info">
-        <p id="location">📍 Obteniendo ubicación...</p>
-        <button onclick="obtenerUbicacion()">Actualizar ubicación</button>
+        <p id="location">📍 Ubicación...</p>
+        <p id="weather">🌦️ Clima...</p>
+
+        <button onclick="toggleModo()">🌙 Cambiar modo</button>
     </div>
 
 </div>
 
-<audio id="sound" src="https://www.soundjay.com/clock/cuckoo-clock-1.mp3"></audio>
+<audio id="sound" src="./sonido/sonido cucu.mp3"></audio>
 
-<script src="script.js"></script>
+<script src="./script.js"></script>
+<footer>
+    <p><small>&copy; 2026 Reloj Cucú. Todos los derechos reservados.</small></small></p>
+</footer>
 
 </body>
 </html>
